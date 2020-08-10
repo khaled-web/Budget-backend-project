@@ -319,7 +319,7 @@ var controller = (function(budgetCtrl, uictrl) {
     var percentage = budgetCtrl.getPercentage();
 
     // update the percentage in UI.
-    console.log(percentage);
+    uictrl.displayPercentage(percentage);
 
   }
 
