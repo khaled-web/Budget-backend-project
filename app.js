@@ -245,10 +245,13 @@ var uiController = (function() {
     },
 
     displayBudet: function(obj) {
+      var type;
+      
+      obj.budget > 0 ? type = "inc" : type = "exp"; // if-Statement
 
-      document.querySelector(domString.budgetLabel).textContent = obj.budget;
-      document.querySelector(domString.incomeLabel).textContent = obj.totalInc;
-      document.querySelector(domString.expensesLabel).textContent = obj.totalExp;
+      document.querySelector(domString.budgetLabel).textContent = formatNumber(obj.budget, type);
+      document.querySelector(domString.incomeLabel).textContent = formatNumber(obj.totalInc, "inc");
+      document.querySelector(domString.expensesLabel).textContent = formatNumber(obj.totalExp, "exp");
       document.querySelector(domString.percentageLabel).textContent = obj.percentage;
 
       if (obj.percentage > 0) {
