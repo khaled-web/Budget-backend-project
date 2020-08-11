@@ -190,6 +190,40 @@ var uiController = (function() {
     expensePercentageLebel: ".item__percentage"
 
   }
+
+  var formatNumber = function(num, type) {
+    var numSplit, int, dec, type;
+    /*
+
+    01. making "+" or "-" berfore the formatNumber
+
+    02. making every number whatever type with "2-decimal point".
+
+    03. making comma separating the thousands
+
+    2310.4568 -> + 2,310.46....for example.
+
+    */
+
+    num = Math.abs(num);
+    num = num.toFixed(2);
+
+    numSplit = num.split(".");
+
+    int = numSplit[0];
+
+    if (int.length > 3) {
+
+      int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, int.length); //  int = 2310.00 -> int = 2,310.00
+
+    }
+
+    dec = numSplit[1];
+
+    return (type === "exp" ? "-" : "+") + '' + int + "." + dec;
+
+  };
+
   return {
 
     getInputeData: function() {
@@ -272,7 +306,7 @@ var uiController = (function() {
       // replace the place-holder text with actual data.
       newHtml = html.replace("%id%", obj.id);
       newHtml = newHtml.replace("%description%", obj.description);
-      newHtml = newHtml.replace("%value%", obj.value);
+      newHtml = newHtml.replace("%value%", formatNumber(obj.value, type));
 
       // insert HTML into the DOM
       document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
