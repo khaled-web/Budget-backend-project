@@ -187,40 +187,29 @@ var uiController = (function() {
     expensesLabel: ".budget__expenses--value",
     percentageLabel: ".budget__expenses--percentage",
     container: ".container",
-    expensePercentageLebel: ".item__percentage"
+    expensePercentageLebel: ".item__percentage",
+    dateLebel: ".budget__title--month"
 
   }
 
   var formatNumber = function(num, type) {
-    var numSplit, int, dec, type;
-    /*
 
-    01. making "+" or "-" berfore the formatNumber
-
-    02. making every number whatever type with "2-decimal point".
-
-    03. making comma separating the thousands
-
-    2310.4568 -> + 2,310.46....for example.
-
-    */
+    var numSplit, int, dec;
 
     num = Math.abs(num);
     num = num.toFixed(2);
-
     numSplit = num.split(".");
-
     int = numSplit[0];
 
     if (int.length > 3) {
 
-      int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, int.length); //  int = 2310.00 -> int = 2,310.00
+      int = int.substr(0, int.length - 3) + "," + int.substr(int.length - 3, int.length);
 
     }
 
     dec = numSplit[1];
 
-    return (type === "exp" ? "-" : "+") + '' + int + "." + dec;
+    return (type === "exp" ? "-" : "+") + " " + int + "." + dec;
 
   };
 
@@ -245,9 +234,9 @@ var uiController = (function() {
     },
 
     displayBudet: function(obj) {
+
       var type;
-      
-      obj.budget > 0 ? type = "inc" : type = "exp"; // if-Statement
+      obj.budget > 0 ? type = "inc" : type = "exp";
 
       document.querySelector(domString.budgetLabel).textContent = formatNumber(obj.budget, type);
       document.querySelector(domString.incomeLabel).textContent = formatNumber(obj.totalInc, "inc");
@@ -285,6 +274,21 @@ var uiController = (function() {
         }
 
       });
+
+    },
+
+    displayCurrentDate: function() {
+
+      var now, monthName, month, year;
+
+      now = new Date();
+      // var christmas = new Date(2016, 11, 25);
+
+      monthName = ['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Octobar', 'November', "December"];
+      month = now.getMonth();
+      year = now.getFullYear();
+      document.querySelector(domString.dateLebel).textContent = monthName[month] + " " + year;
+
 
     },
 
@@ -431,6 +435,7 @@ var controller = (function(budgetCtrl, uictrl) {
   return {
     intial: function() {
       console.log("Application has started.");
+      uictrl.displayCurrentDate();
       uictrl.displayBudet({
         budget: 0,
         totalInc: 0,
