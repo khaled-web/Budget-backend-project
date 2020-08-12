@@ -289,6 +289,29 @@ var uiController = (function() {
       year = now.getFullYear();
       document.querySelector(domString.dateLebel).textContent = monthName[month] + " " + year;
 
+    },
+
+    changeType: function() {
+
+      var fields = document.querySelectorAll(domString.typeData + "," + domString.descriptionData + "," + domString.valueData);
+
+      var nodeListForEach = function(list, callback) {
+
+        for (var i = 0; i < list.length; i++) {
+
+          callback(list[i], i);
+
+        }
+
+      };
+
+      nodeListForEach(fields, function(cur) {
+
+        cur.classList.toggle("red-focus");
+
+      });
+
+      document.querySelector(domString.buttonData).classList.toggle("red");
 
     },
 
@@ -307,7 +330,7 @@ var uiController = (function() {
       } else if (type === "exp") {
 
         element = domString.expenseContainer;
-        html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+        html = '<div  class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       }
 
       // replace the place-holder text with actual data.
@@ -429,6 +452,8 @@ var controller = (function(budgetCtrl, uictrl) {
     });
 
     document.querySelector(dom.container).addEventListener("click", ctrlDeleteItem);
+
+    document.querySelector(dom.typeData).addEventListener("change", uictrl.changeType);
 
   }
 
