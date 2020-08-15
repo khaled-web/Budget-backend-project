@@ -1,12 +1,12 @@
-var budgetController = (function() {
+var budgetController = (function () {
 
-  var Income = function(id, description, value) {
+  var Income = function (id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
   }
 
-  var Expense = function(id, description, value) {
+  var Expense = function (id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
@@ -28,11 +28,11 @@ var budgetController = (function() {
     percentage: 0
   }
 
-  var calculateTotal = function(type) {
+  var calculateTotal = function (type) {
 
     var sum = 0;
 
-    data.allItems[type].forEach(function(current) {
+    data.allItems[type].forEach(function (current) {
 
       sum += current.value;
 
@@ -43,7 +43,7 @@ var budgetController = (function() {
   }
 
   return {
-    additem: function(type, des, val) {
+    additem: function (type, des, val) {
 
       var ID, newItem;
 
@@ -65,7 +65,7 @@ var budgetController = (function() {
 
     },
 
-    calculateBudget: function() {
+    calculateBudget: function () {
 
       calculateTotal("inc");
       calculateTotal("exp");
@@ -79,7 +79,7 @@ var budgetController = (function() {
       }
     },
 
-    getBudget: function() {
+    getBudget: function () {
       return {
         budget: data.budget,
         totalIncome: data.allTotals.inc,
@@ -90,23 +90,27 @@ var budgetController = (function() {
 
     },
 
-    deleteItem: function(type, id){
+    deleteItem: function (type, id) {
 
-     var itemId, itemIndex;
+      var itemId, itemIndex;
 
-     itemId = data.allItems[type].map(function(current) {
-       return current.id;
-     });
+      console.log(type, id)
+      // console result in browser => income 0 => that means the code will try to run => data.allItems['income'].map and that is wrong as the names in data structure are inc and exp note income and expenses
+      // that is happened because you are defining the id in DOM => income-0 , it should be inc-0 to match the name in the data structure
 
-     itemIndex = itemId.indexOf(id);
+      itemId = data.allItems[type].map(function (current) {
+        return current.id;
+      });
 
-     if(itemIndex !== -1){
-       data.allItems[type].splice(itemIndex, 1);
-     }
+      itemIndex = itemId.indexOf(id);
+
+      if (itemIndex !== -1) {
+        data.allItems[type].splice(itemIndex, 1);
+      }
 
     },
 
-    testing: function() {
+    testing: function () {
       console.log(data);
     },
 
@@ -116,7 +120,7 @@ var budgetController = (function() {
 })();
 
 
-var uiController = (function() {
+var uiController = (function () {
 
   var domString = {
     typeData: ".add__type",
@@ -134,7 +138,7 @@ var uiController = (function() {
   }
 
   return {
-    getInputData: function() {
+    getInputData: function () {
       return {
         type: document.querySelector(domString.typeData).value,
         description: document.querySelector(domString.descriptionData).value,
@@ -143,11 +147,11 @@ var uiController = (function() {
 
     },
 
-    getDomString: function() {
+    getDomString: function () {
       return domString;
     },
 
-    addlistItem: function(obj, type) {
+    addlistItem: function (obj, type) {
       var html, element, newHtml;
 
       if (type === "inc") {
@@ -168,18 +172,18 @@ var uiController = (function() {
 
     },
 
-    clearField: function() {
+    clearField: function () {
       var fields, fieldArr;
 
       fields = document.querySelectorAll(domString.descriptionData + "," + domString.valueData);
       fieldArr = Array.prototype.slice.call(fields);
-      fieldArr.forEach(function(current) {
+      fieldArr.forEach(function (current) {
         current.value = "";
       });
 
     },
 
-    displayBuget: function(obj) {
+    displayBuget: function (obj) {
       document.querySelector(domString.budgetLebel).textContent = obj.budget;
       document.querySelector(domString.totalIncomeLebel).textContent = obj.totalIncome;
       document.querySelector(domString.totalExpnseLebel).textContent = obj.totalExpnse;
@@ -197,9 +201,9 @@ var uiController = (function() {
 })();
 
 
-var controller = (function(budgetCtrl, uiCtrl) {
+var controller = (function (budgetCtrl, uiCtrl) {
 
-  var ctrlAddItem = function() {
+  var ctrlAddItem = function () {
 
     var input = uiCtrl.getInputData();
 
@@ -215,30 +219,30 @@ var controller = (function(budgetCtrl, uiCtrl) {
 
   }
 
-  var ctrlDeleteItem = function(event) {
+  var ctrlDeleteItem = function (event) {
 
-   var itemID, itemSplit, type, ID;
+    var itemID, itemSplit, type, ID;
 
-   itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+    itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
 
-   if(itemID){
+    if (itemID) {
 
-     itemSplit = itemID.split("-");
-     type = itemSplit[0];
-     ID = itemSplit[1];
+      itemSplit = itemID.split("-");
+      type = itemSplit[0];
+      ID = itemSplit[1];
 
-     budgetCtrl.deleteItem(type, ID);
+      budgetCtrl.deleteItem(type, ID);
 
-   }
+    }
 
   }
 
-  var setupEventListener = function() {
+  var setupEventListener = function () {
 
     var Dom = uiCtrl.getDomString();
     document.querySelector(Dom.btnData).addEventListener("click", ctrlAddItem);
 
-    document.addEventListener("keypress", function(event) {
+    document.addEventListener("keypress", function (event) {
       if (event.keycode === 13 || event.which === 13) {
         ctrlAddItem();
       }
@@ -250,7 +254,7 @@ var controller = (function(budgetCtrl, uiCtrl) {
 
   return {
 
-    initialization: function() {
+    initialization: function () {
 
       console.log("Application has started");
       uiCtrl.displayBuget({
